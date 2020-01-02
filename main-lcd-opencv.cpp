@@ -344,6 +344,54 @@ public:
 
 };
 
+class Hexagon : public GraphicElement {
+ 
+    Line lines[6];
+ 
+    void initLines() {
+ 
+        const int64_t leftmost = center.x - dim/2;
+        const int64_t rightmost = leftmost + dim;
+        const int64_t midLeft = center.x - dim/4;
+        const int64_t midRight = midLeft + dim/2;
+        const int64_t top = center.y - sin(120.0 / 180.0 * M_PI) * dim/2;
+        const int64_t bottom = center.y + sin(120.0 / 180.0 * M_PI) * dim/2;
+ 
+        lines[0] = Line(Point2D(leftmost, center.y), Point2D(midLeft, top), fg_color, bg_color);
+        lines[1] = Line(Point2D(rightmost, center.y), Point2D(midRight, top), fg_color, bg_color);
+        lines[2] = Line(Point2D(midLeft, top), Point2D(midRight, top), fg_color, bg_color);
+        lines[3] = Line(Point2D(leftmost, center.y), Point2D(midLeft, bottom), fg_color, bg_color);
+        lines[4] = Line(Point2D(rightmost, center.y), Point2D(midRight, bottom), fg_color, bg_color);
+        lines[5] = Line(Point2D(midLeft, bottom), Point2D(midRight, bottom), fg_color, bg_color);
+    }
+ 
+public:
+ 
+    Point2D center;
+    int64_t dim;
+ 
+    Hexagon(Point2D center, int64_t dim, RGB t_fg, RGB t_bg) :
+        center(center), dim(dim), GraphicElement(t_fg, t_bg ) {
+ 
+        initLines();
+ 
+    }
+ 
+    void draw() {
+        for (int i = 0; i < 6; ++i) {
+            lines[i].draw();
+        }
+    }
+ 
+    void hide() {
+        for (int i = 0; i < 6; ++i) {
+            lines[i].hide();
+        }
+    }
+ 
+};
+
+
 int main() {
 
     lcd_init();
